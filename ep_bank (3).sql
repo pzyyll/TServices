@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主機: localhost
--- 產生時間： 2016 年 04 月 22 日 08:39
+-- 產生時間： 2016 年 04 月 22 日 11:25
 -- 伺服器版本: 10.1.8-MariaDB
 -- PHP 版本： 5.6.14
 
@@ -375,6 +375,48 @@ INSERT INTO `leavemessages` (`lm_No`, `u_ID`, `lm_Message`, `lm_Type`, `lm_Appen
 -- --------------------------------------------------------
 
 --
+-- 資料表結構 `qtypetop`
+--
+
+DROP TABLE IF EXISTS `qtypetop`;
+CREATE TABLE `qtypetop` (
+  `qtt_No` varchar(20) NOT NULL,
+  `c_No` varchar(20) DEFAULT NULL,
+  `qtt_NameCn` varchar(50) NOT NULL,
+  `qtt_NameEn` varchar(50) DEFAULT NULL,
+  `qtt_Aut` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- 資料表的匯出資料 `qtypetop`
+--
+
+INSERT INTO `qtypetop` (`qtt_No`, `c_No`, `qtt_NameCn`, `qtt_NameEn`, `qtt_Aut`) VALUES
+('160001', 'c00001', '听力理解', NULL, 1),
+('160002', 'c00001', '阅读理解', NULL, 2),
+('160003', 'c00001', '翻译', NULL, 3),
+('160004', 'c00001', '写作', NULL, 4);
+
+-- --------------------------------------------------------
+
+--
+-- 替換檢視表以便查看 `qtype_view`
+--
+DROP VIEW IF EXISTS `qtype_view`;
+CREATE TABLE `qtype_view` (
+`qtt_No` varchar(20)
+,`c_No` varchar(20)
+,`qtt_NameCn` varchar(50)
+,`qtt_NameEn` varchar(50)
+,`qtt_Aut` int(11)
+,`qt_Type` varchar(50)
+,`qt_TypeCn` varchar(50)
+,`qt_Aut` int(11)
+);
+
+-- --------------------------------------------------------
+
+--
 -- 資料表結構 `questiontype`
 --
 
@@ -382,26 +424,29 @@ DROP TABLE IF EXISTS `questiontype`;
 CREATE TABLE `questiontype` (
   `qt_No` varchar(20) NOT NULL,
   `c_No` varchar(20) DEFAULT NULL,
+  `qtt_No` varchar(20) NOT NULL,
   `qt_Type` varchar(50) DEFAULT NULL,
+  `qt_TypeCn` varchar(50) NOT NULL,
   `qt_Directions` varchar(1000) DEFAULT NULL,
   `qt_AnsScore` float DEFAULT NULL,
-  `qt_http` varchar(100) DEFAULT NULL
+  `qt_http` varchar(100) DEFAULT NULL,
+  `qt_Aut` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- 資料表的匯出資料 `questiontype`
 --
 
-INSERT INTO `questiontype` (`qt_No`, `c_No`, `qt_Type`, `qt_Directions`, `qt_AnsScore`, `qt_http`) VALUES
-('qt0001', 'c00001', 'sort_conversation', 'Section A\nDirections: In this section, you will hear 8 short conversations and 2 long conversations. At the end of each conversation, one or more questions will be asked about what was said. Both the conversation and the questions will be spoken only once. After each question there will be a pause. During the pause, you must read the four choices marked A), B), C) and D), and decide which is the best answer.  Then mark the corresponding letter on Answer Sheet 1 with a single line through the centre.', 1, 'http://127.0.0.1/mp3.mp3'),
-('qt0002', 'c00001', 'long_conversation', '', 1, 'http://127.0.0.1/mp3.mp4'),
-('qt0003', 'c00001', 'sort_passage_listening', 'Section B\nDirections:In this section, you will hear 3 short passages. At the end of each passage, you will hear some questions. Both the passage and the questions will be spoken only once. After you hear a question, you must choose the best answer from the four choices marked A), B), C) and D ). Then mark the corresponding letter on Answer Sheet I with a single line through the centre.', 1, 'http://127.0.0.1/mp3.mp5'),
-('qt0004', 'c00001', 'gap_filling_listening', 'Section C\nDirections:In this section, you will hear a passage three times. When the passage is read for the first time, you should listen carefully for its general idea. When the passage is read for the second time, you are required to fill in the blanks with the exact words you have just heard. Finally, when the passage is read for the third time, you should check what you have written.', 1, 'http://127.0.0.1/mp3.mp6'),
-('qt0005', 'c00001', 'gap_filling_choice', 'Section A\nDirections: In this section, there is a passage with ten blanks. You are required to select one word for each blank from a list of choices given', 0.5, ''),
-('qt0006', 'c00001', 'info_match', 'Section B\nDirections:In this section, you are going to read a passage with ten statements attached to it. Each statement contains information given in one of the paragraphs. Identify the paragraph from which the information is derived. You may choose a paragraph more than once. Each paragraph is marked with a letter. Answer the question by marking the corresponding letter on Answer Sheet 2.', 1, ''),
-('qt0007', 'c00001', 'read_passage', 'Section C\nDirections:There are 2 passages in this section. Each passage is followed by some questions or unfinished statements. For each of them there are four choices marked A),B),C) and D). You should decide on the best choice and mark the corresponding letter on Answer Sheet 2 with a single line through the centre.', 2, ''),
-('qt0008', 'c00001', 'traslation', 'Directions: For this part, you are allowed 30 minutes to translate a passage from Chinese into English. You should write your answer on Answer Sheet 2.', 15, ''),
-('qt0009', 'c00001', 'article', '', 15, '');
+INSERT INTO `questiontype` (`qt_No`, `c_No`, `qtt_No`, `qt_Type`, `qt_TypeCn`, `qt_Directions`, `qt_AnsScore`, `qt_http`, `qt_Aut`) VALUES
+('qt0001', 'c00001', '160001', 'sort_conversation', '短对话', 'Section A\nDirections: In this section, you will hear 8 short conversations and 2 long conversations. At the end of each conversation, one or more questions will be asked about what was said. Both the conversation and the questions will be spoken only once. After each question there will be a pause. During the pause, you must read the four choices marked A), B), C) and D), and decide which is the best answer.  Then mark the corresponding letter on Answer Sheet 1 with a single line through the centre.', 1, 'http://127.0.0.1/mp3.mp3', 0),
+('qt0002', 'c00001', '160001', 'long_conversation', '长对话', '', 1, 'http://127.0.0.1/mp3.mp4', 1),
+('qt0003', 'c00001', '160001', 'sort_passage_listening', '短文听力', 'Section B\nDirections:In this section, you will hear 3 short passages. At the end of each passage, you will hear some questions. Both the passage and the questions will be spoken only once. After you hear a question, you must choose the best answer from the four choices marked A), B), C) and D ). Then mark the corresponding letter on Answer Sheet I with a single line through the centre.', 1, 'http://127.0.0.1/mp3.mp5', 2),
+('qt0004', 'c00001', '160001', 'gap_filling_listening', '短文听写', 'Section C\nDirections:In this section, you will hear a passage three times. When the passage is read for the first time, you should listen carefully for its general idea. When the passage is read for the second time, you are required to fill in the blanks with the exact words you have just heard. Finally, when the passage is read for the third time, you should check what you have written.', 1, 'http://127.0.0.1/mp3.mp6', 3),
+('qt0005', 'c00001', '160002', 'gap_filling_choice', '词汇理解', 'Section A\nDirections: In this section, there is a passage with ten blanks. You are required to select one word for each blank from a list of choices given', 0.5, '', 4),
+('qt0006', 'c00001', '160002', 'info_match', '长篇阅读', 'Section B\nDirections:In this section, you are going to read a passage with ten statements attached to it. Each statement contains information given in one of the paragraphs. Identify the paragraph from which the information is derived. You may choose a paragraph more than once. Each paragraph is marked with a letter. Answer the question by marking the corresponding letter on Answer Sheet 2.', 1, '', 5),
+('qt0007', 'c00001', '160002', 'read_passage', '仔细阅读', 'Section C\nDirections:There are 2 passages in this section. Each passage is followed by some questions or unfinished statements. For each of them there are four choices marked A),B),C) and D). You should decide on the best choice and mark the corresponding letter on Answer Sheet 2 with a single line through the centre.', 2, '', 6),
+('qt0008', 'c00001', '160003', 'traslation', '翻译', 'Directions: For this part, you are allowed 30 minutes to translate a passage from Chinese into English. You should write your answer on Answer Sheet 2.', 15, '', 7),
+('qt0009', 'c00001', '160004', 'article', '写作', '', 15, '', 8);
 
 -- --------------------------------------------------------
 
@@ -656,6 +701,15 @@ DROP TABLE IF EXISTS `courses`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `courses`  AS  select `course`.`c_No` AS `c_No`,`course`.`c_Name` AS `c_Name`,`course`.`c_Introduction` AS `c_Introduction`,`course`.`c_AppdendTime` AS `c_AppdendTime`,`course`.`l_No` AS `l_No`,`course`.`c_IntroEn` AS `c_IntroEn`,`language`.`l_Name` AS `l_Name` from (`course` join `language`) where (`course`.`l_No` = `language`.`l_No`) ;
 
+-- --------------------------------------------------------
+
+--
+-- 檢視表結構 `qtype_view`
+--
+DROP TABLE IF EXISTS `qtype_view`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `qtype_view`  AS  select `qtypetop`.`qtt_No` AS `qtt_No`,`qtypetop`.`c_No` AS `c_No`,`qtypetop`.`qtt_NameCn` AS `qtt_NameCn`,`qtypetop`.`qtt_NameEn` AS `qtt_NameEn`,`qtypetop`.`qtt_Aut` AS `qtt_Aut`,`questiontype`.`qt_Type` AS `qt_Type`,`questiontype`.`qt_TypeCn` AS `qt_TypeCn`,`questiontype`.`qt_Aut` AS `qt_Aut` from (`qtypetop` join `questiontype`) where (`qtypetop`.`qtt_No` = `questiontype`.`qtt_No`) order by `qtypetop`.`qtt_Aut`,`questiontype`.`qt_Aut` ;
+
 --
 -- 已匯出資料表的索引
 --
@@ -753,11 +807,18 @@ ALTER TABLE `leavemessages`
   ADD KEY `FK_leaveMess_part_u_ID` (`u_ID`);
 
 --
+-- 資料表索引 `qtypetop`
+--
+ALTER TABLE `qtypetop`
+  ADD PRIMARY KEY (`qtt_No`);
+
+--
 -- 資料表索引 `questiontype`
 --
 ALTER TABLE `questiontype`
   ADD PRIMARY KEY (`qt_No`),
-  ADD KEY `FK_part1` (`c_No`);
+  ADD KEY `FK_part1` (`c_No`),
+  ADD KEY `qtt_No` (`qtt_No`);
 
 --
 -- 資料表索引 `readofpassage`
@@ -894,7 +955,8 @@ ALTER TABLE `informationmatch`
 -- 資料表的 Constraints `questiontype`
 --
 ALTER TABLE `questiontype`
-  ADD CONSTRAINT `FK_part1` FOREIGN KEY (`c_No`) REFERENCES `course` (`c_No`);
+  ADD CONSTRAINT `FK_part1` FOREIGN KEY (`c_No`) REFERENCES `course` (`c_No`),
+  ADD CONSTRAINT `questiontype_ibfk_1` FOREIGN KEY (`qtt_No`) REFERENCES `qtypetop` (`qtt_No`);
 
 --
 -- 資料表的 Constraints `readofpassage`
