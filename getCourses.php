@@ -8,7 +8,7 @@
 require_once("./sys/connect_database.php");
 //require_once "connect_database.php";
 
-$sql = "SELECT * FROM `course_view` ORDER BY `l_No`, c_Name ASC";
+$sql = "SELECT * FROM `courses` ORDER BY `l_No`, c_Name ASC";
 
 try {
     $arr = $db->query($sql);

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主機: localhost
--- 產生時間： 2016 年 04 月 21 日 15:35
+-- 產生時間： 2016 年 04 月 22 日 08:39
 -- 伺服器版本: 10.1.8-MariaDB
 -- PHP 版本： 5.6.14
 
@@ -19,6 +19,8 @@ SET time_zone = "+00:00";
 --
 -- 資料庫： `ep_bank`
 --
+CREATE DATABASE IF NOT EXISTS `ep_bank` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `ep_bank`;
 
 -- --------------------------------------------------------
 
@@ -71,35 +73,37 @@ CREATE TABLE `course` (
   `c_Name` varchar(50) DEFAULT NULL,
   `c_Introduction` varchar(400) DEFAULT NULL,
   `c_AppdendTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `l_No` varchar(20) DEFAULT NULL
+  `l_No` varchar(20) DEFAULT NULL,
+  `c_IntroEn` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- 資料表的匯出資料 `course`
 --
 
-INSERT INTO `course` (`c_No`, `c_Name`, `c_Introduction`, `c_AppdendTime`, `l_No`) VALUES
-('c00001', 'En_LV4', '大学英语四级', '2016-04-05 06:21:42', 'l00001'),
-('c00002', 'En_LV6', '大学英语六级', '2016-04-09 13:28:26', 'l00001'),
-('c00003', 'En_ProLV4', '大学英语专业四级', '2016-04-09 13:30:38', 'l00001'),
-('c00004', 'Jp_N1', 'N1', '2016-04-09 13:33:09', 'l00002'),
-('c00005', 'Jp_N2', 'N2', '2016-04-09 13:33:53', 'l00002'),
-('c00006', 'Jp_N3', 'N3', '2016-04-12 12:21:17', 'l00002'),
-('c00007', 'En_ProLV6', '大学英语专业六级', '2016-04-12 12:23:01', 'l00001');
+INSERT INTO `course` (`c_No`, `c_Name`, `c_Introduction`, `c_AppdendTime`, `l_No`, `c_IntroEn`) VALUES
+('c00001', 'En_LV4', '大学英语四级', '2016-04-05 06:21:42', 'l00001', 'CET-4'),
+('c00002', 'En_LV6', '大学英语六级', '2016-04-09 13:28:26', 'l00001', 'CET-6'),
+('c00003', 'En_ProLV4', '大学英语专业四级', '2016-04-09 13:30:38', 'l00001', 'TEM-4'),
+('c00004', 'Jp_N1', 'N1', '2016-04-09 13:33:09', 'l00002', 'N1'),
+('c00005', 'Jp_N2', 'N2', '2016-04-09 13:33:53', 'l00002', 'N2'),
+('c00006', 'Jp_N3', 'N3', '2016-04-12 12:21:17', 'l00002', 'N3'),
+('c00007', 'En_ProLV6', '大学英语专业六级', '2016-04-12 12:23:01', 'l00001', 'TEM-6');
 
 -- --------------------------------------------------------
 
 --
--- 替換檢視表以便查看 `course_view`
+-- 替換檢視表以便查看 `courses`
 --
-DROP VIEW IF EXISTS `course_view`;
-CREATE TABLE `course_view` (
-`l_No` varchar(20)
-,`l_Name` varchar(100)
-,`c_No` varchar(20)
+DROP VIEW IF EXISTS `courses`;
+CREATE TABLE `courses` (
+`c_No` varchar(20)
 ,`c_Name` varchar(50)
 ,`c_Introduction` varchar(400)
 ,`c_AppdendTime` timestamp
+,`l_No` varchar(20)
+,`c_IntroEn` varchar(20)
+,`l_Name` varchar(100)
 );
 
 -- --------------------------------------------------------
@@ -611,7 +615,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`u_ID`, `u_Email`, `u_Name`, `u_PhoneNo`, `u_Pwd`, `u_RegDate`, `u_IndeviResume`, `u_Sex`, `u_Type`) VALUES
-('10001', 'pzyyll@gmail.com', 'pzyyll', '13342232190', '9636a9f488ef6d56253302da2968c882', '2016-04-07 09:17:04', NULL, NULL, NULL);
+('10001', 'pzyyll@gmail.com', 'pzyyll', '13342232190', '9636a9f488ef6d56253302da2968c882', '2016-04-07 09:17:04', NULL, NULL, NULL),
+('10002', NULL, NULL, '13342232191', 'e10adc3949ba59abbe56e057f20f883e', '2016-04-21 14:32:44', NULL, NULL, NULL),
+('10003', NULL, NULL, '13342232193', 'e10adc3949ba59abbe56e057f20f883e', '2016-04-21 14:46:29', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -644,11 +650,11 @@ CREATE TABLE `usertoken` (
 -- --------------------------------------------------------
 
 --
--- 檢視表結構 `course_view`
+-- 檢視表結構 `courses`
 --
-DROP TABLE IF EXISTS `course_view`;
+DROP TABLE IF EXISTS `courses`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `course_view`  AS  select `l`.`l_No` AS `l_No`,`l`.`l_Name` AS `l_Name`,`c`.`c_No` AS `c_No`,`c`.`c_Name` AS `c_Name`,`c`.`c_Introduction` AS `c_Introduction`,`c`.`c_AppdendTime` AS `c_AppdendTime` from (`language` `l` join `course` `c` on((`l`.`l_No` = `c`.`l_No`))) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `courses`  AS  select `course`.`c_No` AS `c_No`,`course`.`c_Name` AS `c_Name`,`course`.`c_Introduction` AS `c_Introduction`,`course`.`c_AppdendTime` AS `c_AppdendTime`,`course`.`l_No` AS `l_No`,`course`.`c_IntroEn` AS `c_IntroEn`,`language`.`l_Name` AS `l_Name` from (`course` join `language`) where (`course`.`l_No` = `language`.`l_No`) ;
 
 --
 -- 已匯出資料表的索引
